@@ -65,8 +65,10 @@ events %>%
 ```{r}
 # And remember how we can sort
 
+mystates <- c("IA", "TX")
+
 events %>% 
-  filter(state %in% c("IA", "TX")) %>% 
+  filter(state %in% mystates) %>% 
   arrange(desc(date))
 ```
 
@@ -91,6 +93,7 @@ events %>%
 
 ```{r}
 # Now let's try adding our date-related columns.  First we'll try year.
+#created a new column called year, and extract the year of the respective date
 
 events %>% 
   mutate(year = year(date))
@@ -99,6 +102,7 @@ events %>%
 
 ```{r}
 # We can add multiple columns as part of one mutate call. Let's do year, month and day in one swoop.
+#same as the last case, but using month, date, and year
 
 events %>% 
   mutate(year = year(date),
@@ -108,7 +112,7 @@ events %>%
 
 
 ```{r}
-# This is a good time to remind ourselves that if we want to save our new columns, need to *create new object* or *overwrite*
+# This is a good time to remind ourselves that if we want to save our new columns, need to *create new object* or *overwrite* by assigning it to itself
 
 events <- events %>% 
   mutate(year = year(date),
@@ -139,12 +143,16 @@ events %>%
 ## Grouping / Aggregating Data  
   
 We'll use the tidyverse and dplyr's `group_by()` and `summarise()` 
+They work together!! 
    
 Let's do some counting with `n()`.
 ```{r}
+#separate each group of events based on the candidate last name and use the summarise to show what you want to do, in this case is only to count them up 
+
 events %>% 
   group_by(cand_lastname) %>% 
   summarise(n())
+
 ```
 
 
@@ -197,6 +205,7 @@ events %>%
 
 ```{r}
 # Now we can do:
+#It is possible to do the arranging now because he have assigned the function its own name 
 
 events %>% 
   group_by(cand_lastname) %>% 
@@ -221,7 +230,8 @@ events %>%
 # Now for some magic  
 
 # Because this counting is such a common operation, and because the `n()` becomes a pain to deal with...  
-# ...there is a special shortcut that we can use that collapses everything into one function
+# ...there is a special shortcut that we can use that collapses everything (both the groub by and the summarise with the counting function) into one function
+#it automatic gives the name of the column as "n()"
 
 events %>% 
   count(cand_lastname)
@@ -241,6 +251,14 @@ events %>%
 events %>% 
   count(state) %>% 
   arrange(desc(n))
+
+#OR
+
+events %>% 
+  count(state, sort=TRUE, name = "numberoftrips")
+
+#the SORT=TRUE function automatically sets into descending order 
+#the name function is to change the "n()" column name to something else 
 ```
 
 
