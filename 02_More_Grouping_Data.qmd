@@ -282,6 +282,8 @@ events %>%
 ```{r}
 # we can also group by **more than one** variable  
 # which candidates have gone to which states?
+#how many trips each candidate went to each state? 
+# arrange(state) is for alphabetically arranging 
 
 events %>% 
   count(cand_lastname, state) %>% 
@@ -312,11 +314,13 @@ salaries <- read_excel("data/MLB2018.xlsx") %>%
 salaries 
 
 #Wait, what did that clean names do???
+#took away caps lock in the name of the columns 
 ```
 
 
 ```{r}
 # Now some grouping
+#sum() function to sum up the column that you want to add
 
 # What the total payroll paid out by each team?
 salaries %>% 
@@ -327,6 +331,7 @@ salaries %>%
 
 ```{r}
 #now let's give our new colum with the sums a NAME and sort by salary descending
+#we assigned it a new name 
 salaries %>% 
   group_by(team) %>% 
   summarise(total_dollars = sum(salary)) %>% 
@@ -345,6 +350,7 @@ salaries %>%
 
 ```{r}
 # What about the average paid for each position?
+#we can also use the median() formula 
 salaries %>% 
   group_by(pos) %>% 
   summarise(average_paid = mean(salary)) %>% 
@@ -354,6 +360,7 @@ salaries %>%
 
 ```{r}
 # And if you don't believe in the Designated Hitter?
+#NOT EQUAL is != "something"
 salaries %>% 
   filter(pos != "DH") %>% 
   group_by(pos) %>% 
@@ -367,7 +374,8 @@ salaries %>%
 ```{r}
 # let's say I want to save the results?
 # we'll go back to the top team payrolls
-# we can give it a name within R
+# we can give it a name within R --> save it with a new name to the dataset 
+#decide the file you want to export as 
 
 teampayrolls <- salaries %>% 
   group_by(team) %>% 
@@ -380,6 +388,9 @@ teampayrolls
 
 ```{r}
 # export it to a spreadsheet to share with others
+# in this case, we chose to export as an excel file with the following function 
+# 2 arguments --> name of the dataset, and the name of the file (in this case within the data folder)
+#it shows up on the site within the data folder and can be opened on excel 
 write_xlsx(teampayrolls, "data/teampayrolls.xlsx")
 
 
